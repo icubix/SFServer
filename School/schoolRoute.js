@@ -2,7 +2,7 @@ require('rootpath')();
 
 var express = require('express');
 var app = express();
-var Auth = require('./auth.js');
+var sfObject = require('../School/school.js');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 
@@ -13,12 +13,11 @@ app.use(bodyParser.json());
 
 router.use(cors());
 
+console.log('test');
+
 router.get('/',function(req,res){
-	//console.log('testing');
-	 var data = Auth.GetStudentList();
-	 return res.json(data);
+	var data = sfObject.getList(req,res);
+	return res.json(data);
 });
-
-
 
 module.exports = router;

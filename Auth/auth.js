@@ -1,3 +1,15 @@
+var con = require('mysql');
+
+var connection = con.createConnection({
+	host:'localhost',
+	user: 'root',
+	password: '',
+	database: 'sf'
+});
+
+connection.connect();
+
+
 var Auth = function(){};
 
 
@@ -10,7 +22,7 @@ var data = [{"firstname":"kalidasu","lastname":"surada","email":"kalidasu.surada
 return data;
 };
 
-Auth.prototype.addRoles = function(){
+Auth.prototype.addRoles = function(req,res){
 
 	var query = "insert into sfroles(RoleName,isActive) values('" + req.body.roleName + "',1);";
 	connection.query(query,function(err,result){
@@ -25,7 +37,7 @@ Auth.prototype.addRoles = function(){
 	});
 };
 
-Auth.prototype.addUserRoles = function(){
+Auth.prototype.addUserRoles = function(req,res){
 
 	var query = "insert into sfuserroles(RoleID,UserID) values("+req.body.UserID +"," + req.body.RoleID +");";
 	connection.query(query,function(err,result){
@@ -40,7 +52,7 @@ Auth.prototype.addUserRoles = function(){
 	});
 };
 
-Auth.prototype.validateLogin = function(){
+Auth.prototype.validateLogin = function(req,res){
 
 	var query = "select * from sfusers where UserName = '" + req.body.UserName + "' and Password = '" + req.body.Password +"'";
 	connection.query(query,function(err,result){
@@ -55,7 +67,7 @@ Auth.prototype.validateLogin = function(){
 	});
 };
 
-Auth.prototype.register = function(){
+Auth.prototype.register = function(req,res){
 	var query = "insert into sfperson(FirstName,LastName,EmailAddress,MobileNumber,PersonTypeID,isActive) values('" +
 				req.body.FirstName + "','" +
 				req.body.LastName + "','" +

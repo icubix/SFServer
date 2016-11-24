@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
-var authRoute = require('./authRoute.js');
+var authRoute = require('./Auth/authRoute.js');
+var schoolRoute = require('./School/schoolRoute.js');
 var bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -15,6 +16,7 @@ app.use(function(req, res, next) {
 
 
 app.use('/authRoute',authRoute);
+app.use('/schoolRoute',schoolRoute);
 
 
 app.use(function(req,res,next){
