@@ -20,4 +20,9 @@ router.get('/',function(req,res){
 	return res.json(data);
 });
 
+router.post('/addschool',function(req,res){
+	var data = sfObject.AddSchool(req,res);
+	return res.json(data);
+});
+
 module.exports = router;

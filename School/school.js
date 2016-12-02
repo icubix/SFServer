@@ -50,6 +50,59 @@ SchoolFinder.prototype.AddSchool = function(req,res){
 	});
 };
 
+
+SchoolFinder.prototype.UpdateSchool = function(req,res){
+var instituteID = req.body.InstituteID;
+var query = "update set " +
+				"InstituteName = " + "'" + req.body.InstituteName + "'," +
+			  + "NoOfStudents = "	+ "'" + req.body.NoOfStudents + "'," +
+			  + "NoOfTeachers = " + "'" + req.body.NoOfTeachers + "'," +
+			  + "ClassGroups = " + "'" + req.body.ClassGroups + "'," +
+			  + "Description = " +  "'" + req.body.Description + "'," +
+			  + "SchoolChildrenRatio = " + "'" + req.body.SchoolChildrenRatio + "'," +
+			  + "PhoneNumber = " + "'" + req.body.PhoneNumber + "'," +
+			  + "EmailAddress = " + "'" + req.body.EmailAddress + "'," +
+			  + "Website = " + "'" + req.body.Website + "'," +
+			  + "Longitude = " + "'" + req.body.Longitude + "'," +
+			  + "Latitude = " + "'" + req.body.Latitude + "'," +
+			  + "from sfschooldetails where InstituteID = " + instituteID;
+
+	connection.query(query,function(err,result){
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			return res.json(result);
+			updateAddress(req.body.AddressID,req.body.Street1,req.body.Street2,req.body.State,req.body.City,req.body.ZipCode);
+		}
+	});
+};
+
+
+function updateAddress(addressID,Street1,Street2,State,City,ZipCode)
+{
+	var query = "update set "+
+				+ "Street1 = " + "'" + Street1 + "'," +
+				+ "Street2 = " + "'" + Street2 + "'," +
+				+ "State = " + "'" + State + "'," +
+				+ "City = " + "'" + City + "'," +
+				+ "ZipCode = " + "'" + ZipCode + "'" +
+				+ "from sfaddress where AddressID = " + addressID;
+	conneciton.query(query,function(req,res){
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			return res.json(result);
+		}
+	});
+};
+
+
 function AddMapAddress(instituteID,addressID)
 {
 	var query = "insert into sfschooladdress(InstituteID,AddressID) values("+ instituteID +"," + addressID +");";
