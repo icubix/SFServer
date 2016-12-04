@@ -22,20 +22,21 @@ return data;
 };
 
 SchoolFinder.prototype.AddSchool = function(req,res){
-	var query = "insert into sfschooldetails(InstituteName,NoOfStudents,NoOfTeachers,ClassGroups,Description,SchoolChildrenRatio,"+
-				+"PhoneNumber,EmailAddress,Website,Latitude,Longitude) values(" +
-				+ "'" + req.body.InstituteName + "'," +
-				+ "'" + req.body.NoOfStudents + "'," +
-				+ "'" + req.body.NoOfTeachers + "'," +
-				+ "'" + req.body.ClassGroups + "'," +
-				+ "'" + req.body.Description + "'," +
-				+ "'" + req.body.SchoolChildrenRatio + "'," +
-				+ "'" + req.body.PhoneNumber + "'," +
-				+ "'" + req.body.EmailAddress + "'," +
-				+ "'" + req.body.Website + "'," +
-				+ "'" + req.body.Latitude + "'," +
-				+ "'" + req.body.Longitude + "'" +
-				+ ");";
+	var query = "insert into sfschooldetails(InstituteName,NoOfStudents,NoOfTeachers,ClassGroups,Description,SchoolChildrenRatio,PhoneNumber,EmailAddress,Website,Latitude,Longitude) values(" +
+				 "'" + req.body.InstituteName + "'," +
+				 "'" + req.body.NoOfStudents + "'," +
+				 "'" + req.body.NoOfTeachers + "'," +
+				 "'" + req.body.ClassGroups + "'," +
+				 "'" + req.body.Description + "'," +
+				 "'" + req.body.SchoolChildrenRatio + "'," +
+				 "'" + req.body.PhoneNumber + "'," +
+				 "'" + req.body.EmailAddress + "'," +
+				 "'" + req.body.Website + "'," +
+				 "'" + req.body.Latitude + "'," +
+				 "'" + req.body.Longitude + "'" +
+				 ");";
+
+    console.log(query);
 	connection.query(query,function(err,result){
 		if(err)
 		{
@@ -43,9 +44,13 @@ SchoolFinder.prototype.AddSchool = function(req,res){
 		}
 		else
 		{
-			return res.json(result);
+			console.log(result);
 			var instituteID = result.insertId;
 			AddAddress(instituteID,req.body.Street1,req.body.Street2,req.body.City,req.body.State,req.body.ZipCode);
+			AddCreditCardDtls(req.body.UserID,req.body.InstituteID,req.body.FirstName,req.body.LastName,req.body.CardNumber,req.body.CVV,req.body.Month,req.body.Year);
+			return res.json(result);
+			//var instituteID = result.insertId;
+			
 		}
 	});
 };
@@ -55,17 +60,17 @@ SchoolFinder.prototype.UpdateSchool = function(req,res){
 var instituteID = req.body.InstituteID;
 var query = "update set " +
 				"InstituteName = " + "'" + req.body.InstituteName + "'," +
-			  + "NoOfStudents = "	+ "'" + req.body.NoOfStudents + "'," +
-			  + "NoOfTeachers = " + "'" + req.body.NoOfTeachers + "'," +
-			  + "ClassGroups = " + "'" + req.body.ClassGroups + "'," +
-			  + "Description = " +  "'" + req.body.Description + "'," +
-			  + "SchoolChildrenRatio = " + "'" + req.body.SchoolChildrenRatio + "'," +
-			  + "PhoneNumber = " + "'" + req.body.PhoneNumber + "'," +
-			  + "EmailAddress = " + "'" + req.body.EmailAddress + "'," +
-			  + "Website = " + "'" + req.body.Website + "'," +
-			  + "Longitude = " + "'" + req.body.Longitude + "'," +
-			  + "Latitude = " + "'" + req.body.Latitude + "'," +
-			  + "from sfschooldetails where InstituteID = " + instituteID;
+			    "NoOfStudents = "	+ "'" + req.body.NoOfStudents + "'," +
+			    "NoOfTeachers = " + "'" + req.body.NoOfTeachers + "'," +
+			    "ClassGroups = " + "'" + req.body.ClassGroups + "'," +
+			    "Description = " +  "'" + req.body.Description + "'," +
+			    "SchoolChildrenRatio = " + "'" + req.body.SchoolChildrenRatio + "'," +
+			    "PhoneNumber = " + "'" + req.body.PhoneNumber + "'," +
+			    "EmailAddress = " + "'" + req.body.EmailAddress + "'," +
+			    "Website = " + "'" + req.body.Website + "'," +
+			    "Longitude = " + "'" + req.body.Longitude + "'," +
+			    "Latitude = " + "'" + req.body.Latitude + "'," +
+			    "from sfschooldetails where InstituteID = " + instituteID;
 
 	connection.query(query,function(err,result){
 		if(err)
@@ -76,6 +81,7 @@ var query = "update set " +
 		{
 			return res.json(result);
 			updateAddress(req.body.AddressID,req.body.Street1,req.body.Street2,req.body.State,req.body.City,req.body.ZipCode);
+			updateCreditCardDtls(req.body.UserID,req.body.InstituteID,req.body.FirstName,req.body.LastName,req.body.CardNumber,req.body.CVV,req.body.Month,req.body.Year);
 		}
 	});
 };
@@ -84,12 +90,12 @@ var query = "update set " +
 function updateAddress(addressID,Street1,Street2,State,City,ZipCode)
 {
 	var query = "update set "+
-				+ "Street1 = " + "'" + Street1 + "'," +
-				+ "Street2 = " + "'" + Street2 + "'," +
-				+ "State = " + "'" + State + "'," +
-				+ "City = " + "'" + City + "'," +
-				+ "ZipCode = " + "'" + ZipCode + "'" +
-				+ "from sfaddress where AddressID = " + addressID;
+				"Street1 = " + "'" + Street1 + "'," +
+			    "Street2 = " + "'" + Street2 + "'," +
+			    "State = " + "'" + State + "'," +
+			    "City = " + "'" + City + "'," +
+			    "ZipCode = " + "'" + ZipCode + "'" +
+			    "from sfaddress where AddressID = " + addressID;
 	conneciton.query(query,function(req,res){
 		if(err)
 		{
@@ -102,6 +108,52 @@ function updateAddress(addressID,Street1,Street2,State,City,ZipCode)
 	});
 };
 
+function AddCreditCardDtls(UserID,InstituteID,FirstName,LastName,CardNumber,CVV,Month,Year)
+{
+	var query = "insert into sfcreditcarddetails(AddedBy,InstituteID,FirstName,LastName,CardNumber,CVV,ExpiryMonth,ExpiryYear) values(" +
+				"'" + UserID + "'" +
+				"'" + InstituteID + "'" +
+				"'" + FirstName + "'" +
+				"'" + LastName + "'" +
+				"'" + CardNumber + "'" +
+				"'" + CVv + "'" +
+				"'" + Month + "'" +
+				"'" + Year + "'" +
+				");";
+
+	connection.query(query,function(err,result){
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			console.log(result.insertId);
+		}
+	});
+};
+
+function updateCreditCardDtls(UserID,InstituteID,FirstName,LastName,CardNumber,CVV,Month,Year)
+{
+	var query = "update set " +
+				"FirstName = " + "'" + FirstName + "'," +
+				"LastName = " + "'" + LastName +"'," +
+				"CardNumber = "+ "'" + CardNumber +"'," +
+				"CVV =" + "'" + CVV + "'," +
+				"Month = " + "'" + Month + "'," +
+				"Year = " + "'" + Year + "'" +
+				"Where InstituteID = " + InstituteID;
+	connection.query(query,function(err,result){
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			console.log(res.json(result));
+		}
+	});
+};
 
 function AddMapAddress(instituteID,addressID)
 {
@@ -121,13 +173,14 @@ function AddMapAddress(instituteID,addressID)
 
 function AddAddress(instituteID,Street1,Street2,City,State,ZipCode)
 {
-	var query = "insert into sfaddress(Street1,Street2,Area,ZipCode) values("+
-				+ "'" + Street1 +"'," +
-				+ "'" + Street2 +"'," +
-				+ "'" + City +"'," +
-				+ "'" + ZipCode +"'" +
-				+ ");";
 
+	var query = "insert into sfaddress(Street1,Street2,Area,ZipCode) values("+
+				 "'" + Street1 +"'," +
+				 "'" + Street2 +"'," +
+				 "'" + City +"'," +
+				 "'" + ZipCode +"'" +
+				 ");";
+	console.log(query);
 	connection.query(query,function(err,result){
 		if(err)
 		{
@@ -140,5 +193,45 @@ function AddAddress(instituteID,Street1,Street2,City,State,ZipCode)
 		}
 	});
 };
+
+SchoolFinder.prototype.getSchools = function(req,res) {
+	var query =   " select sd.*,sa.* " +
+				  "	from sfschooldetails sd " + 
+				  " inner join sfschooladdress sad on sd.InstituteID = sd.InstituteID " +
+				  "	inner join sfaddress sa on sa.AddressID = sad.AddressID;"
+	connection.query(query,function(err,result){
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			return res.json(result);
+		}
+	});
+};
+
+SchoolFinder.prototype.getSchool = function(req,res) {
+
+	var InstituteID = req.body.InstituteID;
+	var query =   " select sd.*sa.* " +
+				  "	from sfschooldetails sd " + 
+				  " inner join sfschooladdress sad on sd.InstituteID = sd.InstituteID " +
+				  "	inner join sfaddress sa on sa.AddressID = sad.AddressID " +
+				  " Where sd.InstituteID = " + InstituteID;
+
+	connection.query(query,function(err,result){
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			return res.json(result);
+		}
+	});
+};
+
+
 
 module.exports = new SchoolFinder();

@@ -22,7 +22,17 @@ router.get('/',function(req,res){
 
 router.post('/addschool',function(req,res){
 	var data = sfObject.AddSchool(req,res);
-	return res.json(data);
+	return data;
+});
+
+router.get('/getSchools',function(req,res){
+	var data = sfObject.getSchools(req,res);
+	return data;
+});
+
+router.get('/getSchool',function(req,res){
+	var data = sfObject.getSchool(req,res);
+	return data;
 });
 
 module.exports = router;

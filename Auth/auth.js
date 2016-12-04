@@ -22,6 +22,22 @@ var data = [{"firstname":"kalidasu","lastname":"surada","email":"kalidasu.surada
 return data;
 };
 
+Auth.prototype.GetRoles = function(req,res) {
+	console.log("datacoming");
+	var query = "select * from sfroles where roleID not in(1,2)";
+	connection.query(query,function(err,result){
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			return res.json(result);
+		}
+	});
+	// body...
+};
+
 Auth.prototype.addRoles = function(req,res){
 
 	var query = "insert into sfroles(RoleName,isActive) values('" + req.body.roleName + "',1);";
@@ -84,7 +100,7 @@ Auth.prototype.register = function(req,res){
 		else
 		{
 			console.log(result.insertId);
-			AddUsers(req.body.UserName,req.body.Password,req.body.EmailAddress,result.insertId,1,req.body.roleID);
+			AddUsers(req.body.UserName,req.body.Password,req.body.EmailAddress,result.insertId,1,req.body.RoleID);
 			return res.json(result);
 		}
 	});
@@ -93,6 +109,8 @@ Auth.prototype.register = function(req,res){
 
 function AddUsers(username,password,emailAddress,userID,isActive,roleID)
 {
+	console.log(username);
+	console.log("kali");
 	var query = "insert into sfusers(UserID,UserName,Password,EmailAddress,isActive) values("+
 				userID + ",'" +
 				username + "','" +
@@ -114,6 +132,7 @@ function AddUsers(username,password,emailAddress,userID,isActive,roleID)
 }
 
 function AddUserRoles(UserID,roleID){
+	//console.log(UserID,roleID);
 	var query = "insert into sfuserroles(UserID,RoleID) values(" + UserID + "," + roleID +");";
 	connection.query(query,function(err,result){
 		if(err)
@@ -123,6 +142,7 @@ function AddUserRoles(UserID,roleID){
 		else
 		{
 			console.log(result.insertId);
+			return UserID;
 
 		}
 	});

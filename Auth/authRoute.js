@@ -21,23 +21,29 @@ router.get('/',function(req,res){
 
 router.post('/addRoles',function(req,res){
 	var data = Auth.addRoles(req,res);
-	return res.json(data);
+	return data;
 });
 
 router.post('/addUserRoles',function(req,res){
 	var data = Auth.addUserRoles(req,res);
-	return res.json(data);
+	return data;
 });
 
 
 router.post('/validateLogin',function(req,res){
 	var data = Auth.validateLogin(req,res);
-	return res.json(data);
+	return data;
 });
 
 router.post('/register',function(req,res){
 	var data = Auth.register(req,res);
-	return 
+	return data;
+});
+
+router.get('/getRoles',function(req,res){
+
+	var data = Auth.GetRoles(req,res);
+	return data;
 })
 
 
