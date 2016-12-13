@@ -21,7 +21,9 @@ router.get('/',function(req,res){
 });
 
 router.post('/addschool',function(req,res){
+	console.log("abc");
 	var data = sfObject.AddSchool(req,res);
+
 	return data;
 });
 
@@ -32,6 +34,7 @@ router.get('/getSchools',function(req,res){
 
 router.get('/getSchool',function(req,res){
 	var data = sfObject.getSchool(req,res);
+  
 	return data;
 });
 

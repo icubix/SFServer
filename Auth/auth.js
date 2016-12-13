@@ -70,7 +70,7 @@ Auth.prototype.addUserRoles = function(req,res){
 
 Auth.prototype.validateLogin = function(req,res){
 
-	var query = "select * from sfusers where UserName = '" + req.body.UserName + "' and Password = '" + req.body.Password +"'";
+	var query = "select top 1* from sfusers where UserName = '" + req.body.UserName + "' and Password = '" + req.body.Password +"'";
 	connection.query(query,function(err,result){
 		if(err)
 		{
@@ -78,12 +78,14 @@ Auth.prototype.validateLogin = function(req,res){
 		}
 		else
 		{
+			console.log(result);
 			return res.json(result);
 		}
 	});
 };
 
 Auth.prototype.register = function(req,res){
+	console.log(req);
 	var query = "insert into sfperson(FirstName,LastName,EmailAddress,MobileNumber,PersonTypeID,isActive) values('" +
 				req.body.FirstName + "','" +
 				req.body.LastName + "','" +
