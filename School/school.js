@@ -22,8 +22,12 @@ return data;
 };
 
 SchoolFinder.prototype.AddSchool = function(req,res){
+	var datetime = require('node-datetime');
+	var dt = datetime.create();
+	var fomratted = dt.format('m/d/Y H:M:S');
+	console.log(fomratted);
 	console.log("sef");
-	var query = "insert into sfschooldetails(InstituteName,NoOfStudents,NoOfTeachers,ClassGroups,Description,SchoolChildrenRatio,PhoneNumber,EmailAddress,Website,Latitude,Longitude) values(" +
+	var query = "insert into sfschooldetails(InstituteName,NoOfStudents,NoOfTeachers,ClassGroups,Description,SchoolChildrenRatio,PhoneNumber,EmailAddress,Website,Latitude,Longitude,CreatedBy,CreatedDate) values(" +
 				 "'" + req.body.InstituteName + "'," +
 				 "'" + req.body.NoOfStudents + "'," +
 				 "'" + req.body.NoOfTeachers + "'," +
@@ -34,7 +38,9 @@ SchoolFinder.prototype.AddSchool = function(req,res){
 				 "'" + req.body.EmailAddress + "'," +
 				 "'" + req.body.Website + "'," +
 				 "'" + req.body.Latitude + "'," +
-				 "'" + req.body.Longitude + "'" +
+				 "'" + req.body.Longitude + "'," +
+				 "'" + req.body.UserID + "'," +
+				 "'" + fomratted + "'" +
 				 ");";
 
     console.log(query);
