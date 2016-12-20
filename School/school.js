@@ -249,6 +249,13 @@ SchoolFinder.prototype.getSchool = function(req,res) {
 
 SchoolFinder.prototype.searchSchools = function(req,res){
 	var addressOne = req.body.addressOne;
+	var addressTwo = req.body.addressTwo;
+	var state =  req.body.State;
+	var Zipcode = req.body.Zipcode;
+	var lat = req.body.lat;
+	var long = req.body.long;
+	var radius = req.body.radius;
+
 	console.log(req.body);
 	console.log(req.body.addressOne);
 	console.log(addressOne);
@@ -256,7 +263,34 @@ SchoolFinder.prototype.searchSchools = function(req,res){
 				  "	from sfschooldetails sd " + 
 				  " left join sfschooladdress sad on sd.InstituteID = sad.InstituteID " +
 				  "	left join sfaddress sa on sa.AddressID = sad.AddressID " +
-				  " Where sa.Street1 LIKE '%" + addressOne + "%'";
+				  " Where 1 = 1 "
+
+	if(addressOne != undefined)
+	{
+		query = query + " and sa.Street1 LIKE '%" + addressOne + "%'";
+	}
+
+	if(addressTwo != undefined)
+	{
+		query = query + " and sa.Street2 LIKE '%" + addressTwo + "%'";
+	}
+
+	if(Zipcode != undefined)
+	{
+		query = query + " and sa.ZipCode LIKE '%" + Zipcode + "%'";
+	}
+
+    if(state != undefined)
+	{
+		query = query + " and sa.Area LIKE '%" + state + "%'";
+	}
+
+	if(lat != undefined && long != undefined && radius != undefined)
+	{
+		query = query + " and sa.Latitude LIKE '%" + lat + "%'";
+		query = query + " and sa.Longitude LIKE '%" + long + "%'";
+		query = query + "( 3959 * acos( cos( radians(17.414478) ) * cos( radians("+ lat +" ) ) * cos( radians("+ long +" ) - radians(78.466646) ) + sin( radians(17.414478) ) * sin( radians("+ lat +") ) ) ) AS distance HAVING distance < " + radius;
+	}
 
 	console.log(query);
 	connection.query(query,function(err,result){
