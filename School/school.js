@@ -248,6 +248,8 @@ SchoolFinder.prototype.getSchool = function(req,res) {
 };
 
 SchoolFinder.prototype.searchSchools = function(req,res){
+	// console.log("hitting");
+	// console.log(req.body);
 	var addressOne = req.body.addressOne;
 	var addressTwo = req.body.addressTwo;
 	var state =  req.body.State;
@@ -287,9 +289,9 @@ SchoolFinder.prototype.searchSchools = function(req,res){
 
 	if(lat != undefined && long != undefined && radius != undefined)
 	{
-		query = query + " and sa.Latitude LIKE '%" + lat + "%'";
-		query = query + " and sa.Longitude LIKE '%" + long + "%'";
-		query = query + "( 3959 * acos( cos( radians(17.414478) ) * cos( radians("+ lat +" ) ) * cos( radians("+ long +" ) - radians(78.466646) ) + sin( radians(17.414478) ) * sin( radians("+ lat +") ) ) ) AS distance HAVING distance < " + radius;
+		//query = query + " and sa.Latitude LIKE '%" + lat + "%'";
+		//query = query + " and sa.Longitude LIKE '%" + long + "%'";
+		//query = query + "( 3959 * acos( cos( radians(17.414478) ) * cos( radians("+ lat +" ) ) * cos( radians("+ long +" ) - radians(78.466646) ) + sin( radians(17.414478) ) * sin( radians("+ lat +") ) ) ) AS distance HAVING distance < " + radius;
 	}
 
 	console.log(query);
