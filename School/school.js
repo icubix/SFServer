@@ -247,6 +247,31 @@ SchoolFinder.prototype.getSchool = function(req,res) {
 	});
 };
 
+SchoolFinder.prototype.searchSchools = function(req,res){
+	var addressOne = req.body.addressOne;
+	console.log(req.body);
+	console.log(req.body.addressOne);
+	console.log(addressOne);
+	var query =   " select sd.*,sa.* " +
+				  "	from sfschooldetails sd " + 
+				  " left join sfschooladdress sad on sd.InstituteID = sad.InstituteID " +
+				  "	left join sfaddress sa on sa.AddressID = sad.AddressID " +
+				  " Where sa.Street1 LIKE '%" + addressOne + "%'";
+
+	console.log(query);
+	connection.query(query,function(err,result){
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			console.log(result);
+			return res.json(result);
+		}
+	})
+};
+
 
 
 module.exports = new SchoolFinder();

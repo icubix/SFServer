@@ -38,4 +38,9 @@ router.get('/getSchool',function(req,res){
 	return data;
 });
 
+router.post('/searchSchools',function(req,res){
+	var data = sfObject.searchSchools(req,res);
+	return data;
+});
+
 module.exports = router;
